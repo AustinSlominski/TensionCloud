@@ -3,21 +3,35 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    length = 111.803398;
-
+    //origin and destination points
+    targets.addVertex(ofVec3f(-150,0));
+    targets.addColor(ofColor(255));
+    targets.addVertex(ofVec3f(-150,100,50));
+    targets.addColor(ofColor(255));
+    
+    targets.setMode(OF_PRIMITIVE_POINTS);
+    
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(5);
+    
+    //line to be transformed
+    originP = targets.getVertex(0);
+    destP = targets.getVertex(1);
+    
+    length = sqrt(pow(destP.x-originP.x,2)+pow(destP.y-originP.y,2)+pow(destP.z-originP.z,2));
+    
     //Finding the angle of rotation to match that of the origin and destination points
-    angleRotX = atan2((100-0),(50-0))*180/PI;
-    angleRotY = atan2((50-0),(-150+150))*180/PI;
-    angleRotZ = atan2((100-0),(-150+150))*180/PI;
+    angleRotX = atan2((destP.z-originP.z),(destP.y-originP.y))*180/PI;
+    angleRotY = atan2((destP.z-originP.z),(destP.x-originP.x))*180/PI;
+    angleRotZ = atan2((destP.y-originP.y),(destP.x-originP.x))*180/PI;
     
     roll.makeRotate(angleRotX, ofVec3f(1,0,0));
     yaw.makeRotate(angleRotY, ofVec3f(0,1,0));
     pitch.makeRotate(angleRotZ, ofVec3f(0,0,1));
     curRot = roll*pitch*yaw;
     
-    
-    tempO.set(-55.9,0);
-    tempD.set(55.9);
+    tempO.set(-length/2,0);
+    tempD.set(length/2,0);
     
     float time = ofGetElapsedTimef()/5;
     
@@ -33,17 +47,6 @@ void ofApp::setup(){
     glLineWidth(1);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
-    
-    //origin and destination points
-    mesh.addVertex(ofVec3f(-150,0));
-    mesh.addColor(ofColor(255));
-    mesh.addVertex(ofVec3f(-150,100,50));
-    mesh.addColor(ofColor(255));
-    
-    mesh.setMode(OF_PRIMITIVE_POINTS);
-    
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(5);
 }
 
 //--------------------------------------------------------------
@@ -65,10 +68,10 @@ void ofApp::draw(){
         ofLine(0,0,300,0,0,-300);
         ofSetColor(0,0,255);
 
-        mesh.draw();
+        targets.draw();
     
         ofPushMatrix();
-            ofTranslate((-150-150)/2,(0+100)/2,(0+50)/2);
+            ofTranslate((originP.x+destP.x)/2,(originP.y+destP.y)/2,(originP.z+destP.z)/2);
             ofVec3f axis;
             float angle;
             curRot.getRotate(angle, axis);
@@ -77,50 +80,5 @@ void ofApp::draw(){
         ofPopMatrix();
     cam.end();
     
-
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
