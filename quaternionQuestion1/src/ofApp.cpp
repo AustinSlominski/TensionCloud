@@ -1,5 +1,9 @@
 #include "ofApp.h"
 
+//SOLVED SOLVED SOLVED SOLVED SOLVED
+//http://forum.openframeworks.cc/t/question-about-quaternion-rotation-problems/19802
+
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     
@@ -21,14 +25,14 @@ void ofApp::setup(){
     length = sqrt(pow(destP.x-originP.x,2)+pow(destP.y-originP.y,2)+pow(destP.z-originP.z,2));
     
     //Finding the angle of rotation to match that of the origin and destination points
-    angleRotX = atan2((destP.z-originP.z),(destP.y-originP.y))*180/PI;
-    angleRotY = atan2((destP.z-originP.z),(destP.x-originP.x))*180/PI;
-    angleRotZ = atan2((destP.y-originP.y),(destP.x-originP.x))*180/PI;
+    //angleRotX = atan2((destP.y-originP.y),(destP.z-originP.z))*180/PI;
+    //angleRotY = atan2((destP.z-originP.z),(destP.x-originP.x))*180/PI;
+    //angleRotZ = atan2((destP.y-originP.y),(destP.x-originP.x))*180/PI;
     
-    roll.makeRotate(angleRotX, ofVec3f(1,0,0));
-    yaw.makeRotate(angleRotY, ofVec3f(0,1,0));
-    pitch.makeRotate(angleRotZ, ofVec3f(0,0,1));
-    curRot = roll*pitch*yaw;
+    //roll.makeRotate(angleRotX, ofVec3f(1,0,0));
+    //yaw.makeRotate(angleRotY, ofVec3f(0,1,0));
+    //pitch.makeRotate(angleRotZ, ofVec3f(0,0,1));
+    //curRot = roll*pitch*yaw;
     
     tempO.set(-length/2,0);
     tempD.set(length/2,0);
@@ -72,12 +76,30 @@ void ofApp::draw(){
     
         ofPushMatrix();
             ofTranslate((originP.x+destP.x)/2,(originP.y+destP.y)/2,(originP.z+destP.z)/2);
+            
+            ofVec3f direction = (destP - originP).getNormalized();
+            float rotationAmount;
+            ofVec3f rotationAngle;
+            ofQuaternion rotation;
+            ofVec3f axis(1, 0, 0);
+            rotation.makeRotate(axis, direction);
+            rotation.getRotate(rotationAmount, rotationAngle);
+            ofRotate(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
+            connections.draw();
+            
+        ofPopMatrix();
+    
+    /*
+        ofPushMatrix();
+            ofTranslate((originP.x+destP.x)/2,(originP.y+destP.y)/2,(originP.z+destP.z)/2);
+            ofVec3f direction = (destP - originP).getNormalized();
             ofVec3f axis;
             float angle;
             curRot.getRotate(angle, axis);
             ofRotate(angle, axis.x, axis.y, axis.z);
             connections.draw();
         ofPopMatrix();
+     */
     cam.end();
     
 
