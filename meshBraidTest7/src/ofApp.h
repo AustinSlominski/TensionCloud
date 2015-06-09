@@ -25,6 +25,7 @@ public:
     
     ofParameter<float> amp, f;
     ofParameter<int> res, speed;
+
     
     ofxPanel gui;
 };

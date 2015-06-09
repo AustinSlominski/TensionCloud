@@ -12,8 +12,9 @@ oscThread::oscThread(ofVec2f origin, ofMesh mesh)
     
     //Rethink these variables, and in what context do they REALLY have influence?
     color = ofColor(ofRandom(255));
-    res   = 200;
+    res   = 150;
     speed = 5;
+    cSpeed = 80; //RENAME
     amp   = 10;
     f     = 3;
     
@@ -67,6 +68,7 @@ void oscThread::draw()
 void oscThread::update()
 {
     float time = ofGetElapsedTimef()/speed;
+    int leadVertex = fmodf(ofGetElapsedTimef()*cSpeed,res);
     
     for (int x=0;x<res;x++){
         ofVec3f oscTemp = this->getMesh().getVertex(x);
@@ -74,5 +76,10 @@ void oscThread::update()
         float oscillation = amp * sin(2 * pi * f * time + p)/20;
         oscTemp.rotate(x/f,ofVec3f(1,0,0));
         this->getMesh().setVertex(x,oscTemp);
+        this->getMesh().setColor(x,ofColor(ofColor(255),0));
+    }
+
+    for(int i=0, cc=50; i<50; i++,cc--){//50 is trail length
+        this->getMesh().setColor(leadVertex-i,ofColor(ofColor(255),ofMap(cc,0,50,0,255)));
     }
 }

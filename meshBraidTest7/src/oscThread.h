@@ -24,6 +24,9 @@ public:
     float amp;    //Amplitude
     float f;      //Frequency
     
+    int cc;
+    float cSpeed;
+    
     int numVerts;
     
     oscThread(ofVec2f origin, ofMesh mesh);

@@ -2,18 +2,19 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetFrameRate(80);
     ofSetVerticalSync(true);
     numMesh = 20;
     
     
-     for(int i=0;i<numMesh;i++){
-     mesh.addVertex(ofVec3f(ofRandom(-800,800),ofRandom(-800,800),ofRandom(-800,800)));
-     mesh.addColor(255);
-     
-     offsets.push_back(ofVec3f(ofRandom(-10000,10000),ofRandom(-10000,10000),ofRandom(-10000,10000)));
-     mesh.setupIndicesAuto();
-     }
-     
+    for(int i=0;i<numMesh;i++){
+        mesh.addVertex(ofVec3f(ofRandom(-800,800),ofRandom(-800,800),ofRandom(-800,800)));
+        mesh.addColor(255);
+
+        offsets.push_back(ofVec3f(ofRandom(-10000,10000),ofRandom(-10000,10000),ofRandom(-10000,10000)));
+        mesh.setupIndicesAuto();
+    }
+    
     /*
     mesh.addVertex(ofVec3f(-150,0));        //0
     mesh.addColor(ofColor(255));
@@ -72,6 +73,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofEnableDepthTest();
+    ofEnableAlphaBlending();
     //ofBackgroundGradient(ofColor(50), ofColor(0));
     ofBackground(ofColor(0));
     
@@ -107,7 +109,7 @@ void ofApp::keyPressed(int key){
         vector<oscThread> tempBraid;    //Inner vector
         ofVec2f tempOrigin;             //Origin/dest vector
         tempOrigin.set((int)ofRandom(numMesh),(int)ofRandom(numMesh));
-        //tempOrigin.set(0,2);
+        //tempOrigin.set(0,1);
         while (tempOrigin.x == tempOrigin.y){
             tempOrigin.set((int)ofRandom(numMesh),(int)ofRandom(numMesh));
         }
