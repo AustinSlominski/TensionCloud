@@ -17,17 +17,18 @@ public:
     float length;
     float rotationAmount;
     
-    ofColor color;
-    
-    int   res ;   //Resolution
-    int   speed;  //Speed (lower=faster)
-    float amp;    //Amplitude
-    float f;      //Frequency
-    
-    int cc;
-    float cSpeed;
-    
+    int color;
     int numVerts;
+    
+    //Braid Construction
+        int   res;   //Resolution
+        int   speed;  //Speed (lower=faster)
+        float amp;    //Amplitude
+        float f;      //Frequency
+    
+    //Lead and Tail Construction / Movement
+        float cSpeed;        //Actual speed of movement
+        int   tC, ttLength, tLength; //Tail Control Data, Tail Length
     
     oscThread(ofVec2f origin, ofMesh mesh);
 };

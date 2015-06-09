@@ -11,14 +11,16 @@ oscThread::oscThread(ofVec2f origin, ofMesh mesh)
     tempD.set(length/2,0);
     
     //Rethink these variables, and in what context do they REALLY have influence?
-    color = ofColor(ofRandom(255));
-    res   = 150;
+    color = ofRandom(255);
+    res   = 300;
     speed = 5;
-    cSpeed = 80; //RENAME
     amp   = 10;
     f     = 3;
     
-    numVerts  = 0;
+    numVerts = 0;
+    tLength  = 100;
+    tC   = 80;
+    cSpeed = 40;
 }
 
 void oscThread::setup()
@@ -45,7 +47,7 @@ void oscThread::setup()
     }
     
     this->getMesh().setMode(OF_PRIMITIVE_LINE_STRIP);
-    glLineWidth(1);
+    glLineWidth(2);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
 }
@@ -79,7 +81,15 @@ void oscThread::update()
         this->getMesh().setColor(x,ofColor(ofColor(255),0));
     }
 
-    for(int i=0, cc=50; i<50; i++,cc--){//50 is trail length
-        this->getMesh().setColor(leadVertex-i,ofColor(ofColor(255),ofMap(cc,0,50,0,255)));
+    if(leadVertex < tLength){
+        ttLength = leadVertex;//jerky because of leadVertex dupes
+    }else{
+        ttLength = tLength;
+    }
+    
+    ofLog(OF_LOG_NOTICE, "tLength=" + ofToString(ttLength) + " leadVertex=" + ofToString(leadVertex));
+    
+    for(int i=0, tAlpha=ttLength; i<ttLength; i++,tC--){
+        this->getMesh().setColor(leadVertex-i,ofColor(color,color+i,color-i,ofMap(tC,0,50,0,255)));
     }
 }
