@@ -47,7 +47,7 @@ void oscThread::setup()
     }
     
     this->getMesh().setMode(OF_PRIMITIVE_LINE_STRIP);
-    glLineWidth(2);
+    glLineWidth(1);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
 }
