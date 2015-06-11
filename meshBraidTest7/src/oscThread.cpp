@@ -26,12 +26,14 @@ oscThread::oscThread(ofVec2f origin, ofMesh mesh)
 void oscThread::setup()
 {
     numVerts = this->getMesh().getNumVertices();
-    float time = ofGetElapsedTimef()/speed;
+    time = ofGetElapsedTimef();
+    mTime = time/speed;
+    
     
     for (float x=0;x<res;x++){
         float delta = x/res;
         float p = x;
-        float oscillation = amp * sin((2 * pi * f * time + p)/20);
+        float oscillation = amp * sin((2 * pi * f * mTime + p)/20);
         
         ofVec3f signal = tempO.getInterpolated(tempD, delta);
         signal.set(signal);
@@ -69,13 +71,21 @@ void oscThread::draw()
 
 void oscThread::update()
 {
-    float time = ofGetElapsedTimef()/speed;
-    int leadVertex = fmodf(ofGetElapsedTimef()*cSpeed,res);
+    float dt = ofClamp(ofGetElapsedTimef() - time, 0, 0.1);//the difference between the time now and the time from the previous frame, constrained.
+    
+    time = ofGetElapsedTimef();
+    mTime = time/speed;
+    tcTime = time * dt;
+    cTime = int(tcTime + 0.5);
+    
+    int leadVertex = fmodf(cTime*cSpeed,res);//FORMATTED TIME
+    
+    ofLog(OF_LOG_NOTICE, "tcTime: " + ofToString(tcTime) + " cTime: " + ofToString(cTime));
     
     for (int x=0;x<res;x++){
         ofVec3f oscTemp = this->getMesh().getVertex(x);
         float p = x;
-        float oscillation = amp * sin(2 * pi * f * time + p)/20;
+        float oscillation = amp * sin(2 * pi * f * mTime + p)/20;
         oscTemp.rotate(x/f,ofVec3f(1,0,0));
         this->getMesh().setVertex(x,oscTemp);
         this->getMesh().setColor(x,ofColor(ofColor(255),0));
