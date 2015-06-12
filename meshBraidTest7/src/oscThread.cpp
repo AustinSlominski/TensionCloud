@@ -11,16 +11,15 @@ oscThread::oscThread(ofVec2f origin, ofMesh mesh)
     tempD.set(length/2,0);
     
     //Rethink these variables, and in what context do they REALLY have influence?
-    color = ofRandom(255);
-    res   = 300;
-    speed = 5;
-    amp   = 10;
-    f     = 3;
+    color    = ofRandom(255);   //Real color of braid. Fixed
+    res      = 300;             //Resolution of line
+    speed    = 5;               //??
+    amp      = 10;              //??
+    f        = 3;               //??
     
     numVerts = 0;
     tLength  = 100;
-    tC   = 80;
-    cSpeed = 40;
+    cSpeed   = 40;
 }
 
 void oscThread::setup()
@@ -28,7 +27,6 @@ void oscThread::setup()
     numVerts = this->getMesh().getNumVertices();
     time = ofGetElapsedTimef();
     mTime = time/speed;
-    
     
     for (float x=0;x<res;x++){
         float delta = x/res;
@@ -71,16 +69,21 @@ void oscThread::draw()
 
 void oscThread::update()
 {
-    float dt = ofClamp(ofGetElapsedTimef() - time, 0, 0.1);//the difference between the time now and the time from the previous frame, constrained.
-    
     time = ofGetElapsedTimef();
     mTime = time/speed;
-    tcTime = time * dt;
-    cTime = int(tcTime + 0.5);
+    float dt = ofClamp(time-time0, 0, 0.1);
     
-    int leadVertex = fmodf(cTime*cSpeed,res);//FORMATTED TIME
+    time0 = time;
+    lead += cSpeed * dt;
     
-    ofLog(OF_LOG_NOTICE, "tcTime: " + ofToString(tcTime) + " cTime: " + ofToString(cTime));
+    if (lead > leadVertex){
+        leadVertex = lead;
+    }
+    
+    if (leadVertex > res){
+        leadVertex = 0;
+        lead = 0;
+    }
     
     for (int x=0;x<res;x++){
         ofVec3f oscTemp = this->getMesh().getVertex(x);
@@ -92,14 +95,12 @@ void oscThread::update()
     }
 
     if(leadVertex < tLength){
-        ttLength = leadVertex;//jerky because of leadVertex dupes
+        ttLength = leadVertex;
     }else{
         ttLength = tLength;
     }
     
-    ofLog(OF_LOG_NOTICE, "tLength=" + ofToString(ttLength) + " leadVertex=" + ofToString(leadVertex));
-    
-    for(int i=0, tAlpha=ttLength; i<ttLength; i++,tC--){
+    for(int i=0, tC=ttLength; i<ttLength; i++,tC--){
         this->getMesh().setColor(leadVertex-i,ofColor(color,color+i,color-i,ofMap(tC,0,50,0,255)));
     }
 }

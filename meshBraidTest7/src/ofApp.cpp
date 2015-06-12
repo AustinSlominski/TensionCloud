@@ -52,7 +52,7 @@ void ofApp::update(){
     }
     
     //Point Jitter
-    /*
+    
      for(int i=0;i<numMesh; i++){
      ofVec3f vert = mesh.getVertex(i);
      
@@ -67,7 +67,7 @@ void ofApp::update(){
      
      mesh.setVertex(i,vert);
      }
-     */
+     
 }
 
 //--------------------------------------------------------------
@@ -108,7 +108,7 @@ void ofApp::keyPressed(int key){
     if(key=='f'){
         vector<oscThread> tempBraid;    //Inner vector
         ofVec2f tempOrigin;             //Origin/dest vector
-        tempOrigin.set(0,(int)ofRandom(numMesh));
+        tempOrigin.set((int)ofRandom(numMesh),(int)ofRandom(numMesh));
         //tempOrigin.set(0,1);
         while (tempOrigin.x == tempOrigin.y){
             tempOrigin.set((int)ofRandom(numMesh),(int)ofRandom(numMesh));
